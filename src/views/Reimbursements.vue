@@ -12,38 +12,53 @@
           </div>
 
           <div class="topicButton">
-            <el-button-group>
-              <el-button type="primary" plain>1</el-button>
-              <el-button type="primary" plain>2</el-button>
-              <el-button type="primary" plain>Next></el-button>
-              <el-button type="primary" plain>Last>></el-button>
-            </el-button-group>
+            <div>
+              <el-input v-model="input" placeholder="请输入搜索内容" style="width: 180px;margin-right: 15px;"></el-input>
+            </div>
+            <el-pagination
+              hide-on-single-page
+              background
+              layout="prev, pager, next"
+              :page-size="pageSize"
+              :total="tableData.length"
+              @current-change="handlePaginate"
+              :current-page.sync='currentPage'
+            >
+            </el-pagination>
           </div>
-
           <div>
             <el-table
-              :data="tableData"
+              :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
               :stripe="true"
               class="table"
+              :default-sort = "defaultSort"
+              @sort-change="sortChange"
+              @filter-change="filterChange"
             >
               <el-table-column
                 prop="sumbmitted_at"
                 label="Submit Date"
+                sortable="custom"
                 >
               </el-table-column>
               <el-table-column
                 prop="amount"
                 label="Amount"
+                sortable="custom"
                 >
               </el-table-column>
               <el-table-column
                 prop="subject_count"
                 label="Count"
+                sortable="custom"
                 >
               </el-table-column>
               <el-table-column
                 prop="status"
-                label="Status">
+                label="Status"
+                column-key="status"
+                :filters="statusFilters"
+                >
               </el-table-column>
               <el-table-column>
                 <template slot-scope="scope">
@@ -82,14 +97,45 @@
 </template>
 
 <script>
+import { orderBy } from 'lodash'
 import topicsiderbar from '../topicsiderbar.vue'
 import Siderbar from './Siderbar.vue'
 export default {
+  data() {
+    return {
+      pageSize: 2,
+      currentPage: 1,
+      defaultSort: { prop: 'sumbmitted_at', order: 'descending' },
+      currentSort: null,
+      statusFilters: [{ text: 'pending', value: 'pending' }, { text: 'paid', value: 'paid' }],
+      currentFilters: null,
+      input: ''
+    }
+  },
+
   components: { topicsiderbar, Siderbar },
 
   computed: {
     tableData() {
-      return this.$store.state.tableData
+      let data = this.$store.state.tableData
+
+      if (this.currentFilters) {
+        for (const column in this.currentFilters) {
+          const filterValues = this.currentFilters[column]
+          if (filterValues.length > 0) {
+            data = data.filter(row => filterValues.includes(row[column]))
+          }
+        }
+      }
+
+      if (this.input !== '') {
+        data = data.filter(row => row.items.some((value) => {
+          return value.description.includes(this.input)
+        }))
+      }
+
+      const { prop, order } = this.currentSort || this.defaultSort
+      return orderBy(data, prop, order === 'ascending' ? 'asc' : 'desc')
     }
   },
 
@@ -99,6 +145,25 @@ export default {
     },
     deleteButton(id) {
       this.$store.commit('deleteItem', id)
+    },
+    filterChange(filters) {
+      this.currentPage = 1
+      this.currentFilters = filters
+    },
+    handlePaginate(currentPage) {
+      this.currentPage = currentPage
+    },
+    sortChange({ column, prop, order }) {
+      this.currentPage = 1
+
+      if (order) {
+        this.currentSort = { prop, order }
+      } else {
+        this.currentSort = null
+      }
+    },
+    backLogin() {
+      this.$router.push({ path: '/login' })
     }
   }
 }
@@ -130,10 +195,11 @@ export default {
     }
     .topicButton{
       height: 40px;
-      text-align: right;
       background: #dde0e8;
       padding: 15px;
       margin: 20px 0;
+      display: flex;
+      justify-content:space-between;
     }
     .table{
       width: 100%;

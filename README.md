@@ -1,4 +1,4 @@
-# payment
+# reimbursement-vue
 
 ## Project setup
 ```

@@ -8,8 +8,8 @@
       <div class="login">Sign in</div>
       <el-alert
         type="error"
-        :title="message"
         :closable="false"
+        :title="message"
         v-if="message"
       ></el-alert>
       <div class="form-container">
@@ -22,7 +22,7 @@
           <el-input placeholder="请输入内容" v-model="passwordInput" show-password></el-input>
         </div>
         <div class="form-group">
-          <el-checkbox>Remember me</el-checkbox>
+          <el-checkbox v-model="checked">Remember me</el-checkbox>
         </div>
         <el-button type="primary" @click="loginButton">Sign in</el-button>
       </div>
@@ -35,10 +35,10 @@
 export default {
   data() {
     return {
-      checked: false,
       emailInput: '',
       passwordInput: '',
-      message: ''
+      message: '',
+      checked: false
     }
   },
 
@@ -46,10 +46,18 @@ export default {
     loginButton() {
       if (!this.emailInput && !this.passwordInput) {
         this.message = '请输入账号和密码'
-      } else if (this.emailInput === 'admin' && this.passwordInput === 'admin') {
-        this.$router.push({ path: '/reimbursements' })
       } else {
-        this.message = '账号或密码错误,请输入正确的信息!'
+        this.$store.state.isLogin = true
+        this.$router.push({ path: '/reimbursements' })
+        this.$store.state.accountName = this.emailInput
+
+        if (this.checked) {
+          this.$store.state.accountName = this.emailInput
+          localStorage.setItem('accountName', this.emailInput)
+        } else {
+          this.$store.state.accountName = this.emailInput
+          sessionStorage.setItem('accountName', this.emailInput)
+        }
       }
     }
   }

@@ -1,20 +1,21 @@
 <template>
   <div class="topicNavigation">
     <div class="topicAccount">
-      <span class="span1">Social Ekohe</span>
+      <span class="span1">ReimbVue</span>
       <span class="span2"><router-link to="/reimbursements">Reimbursements</router-link></span>
       <span class="span3">Holiday</span>
     </div>
 
     <div class="account">
-      <el-dropdown>
+      <router-link to="/login" v-if="!$store.state.isLogin"><el-button type="text">login</el-button></router-link>
+      <el-dropdown v-if="$store.state.isLogin">
         <span class="el-dropdown-link">
-          admin<i class="el-icon-arrow-down el-icon--right"></i>
+          {{$store.state.accountName}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>Profile</el-dropdown-item>
           <el-dropdown-item>Account Settings</el-dropdown-item>
-          <el-dropdown-item>Log out</el-dropdown-item>
+          <el-dropdown-item @click.native="logOut">Log out</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -23,7 +24,13 @@
 
 <script>
 export default {
-
+  methods: {
+    logOut() {
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push({ path: '/login' })
+      })
+    }
+  }
 }
 
 </script>

@@ -3,74 +3,77 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const accountName = localStorage.getItem('accountName') || sessionStorage.getItem('accountName')
+const isLogin = Boolean(accountName)
+
 export default new Vuex.Store({
   state: {
-    tableData: [
-      {
-        id: '1',
-        sumbmitted_at: '2016-05-02',
-        amount: '111',
-        subject_count: '2',
-        status: 'pending',
-        items: [
-          {
-            date: '2016-05-02',
-            amount: 111,
-            usage: 'Lunch',
-            people_numbers: 2,
-            description: 'Test'
-          },
-          {
-            date: '2016-05-20',
-            amount: 112,
-            usage: 'Lunch',
-            people_numbers: 1,
-            description: 'Test'
-          }
-        ]
+    isLogin: isLogin,
+    accountName: accountName,
+    tableData: [{
+      id: '1',
+      sumbmitted_at: '2016-05-02',
+      amount: '111',
+      subject_count: '2',
+      status: 'pending',
+      items: [{
+        date: '2016-05-02',
+        amount: 111,
+        usage: 'Lunch',
+        people_numbers: 2,
+        description: 'I am Test,狗子'
       },
       {
-        id: '2',
-        sumbmitted_at: '2017-05-02',
-        amount: '222',
-        subject_count: '3',
-        status: 'paid',
-        items: [{
-          date: '2017-05-02',
-          amount: 435,
-          usage: 'Dinner',
-          people_numbers: 4,
-          description: 'String'
-        }]
-      },
-      {
-        id: '3',
-        sumbmitted_at: '2018-05-02',
-        amount: '333',
-        subject_count: '2',
-        status: 'pending',
-        items: [{
-          date: '2018-05-02',
-          amount: 45,
-          usage: 'Taxi',
-          people_numbers: 1,
-          description: 'test'
-        }]
-      },
-      {
-        id: '4',
-        sumbmitted_at: '2019-05-02',
-        amount: '444',
-        subject_count: '3',
-        status: 'pending',
-        items: [{
-          date: '2019-05-02',
-          amount: 99,
-          usage: 'Other',
-          people_numbers: 1,
-          description: 'String'
-        }]
+        date: '2016-05-20',
+        amount: 112,
+        usage: 'Lunch',
+        people_numbers: 1,
+        description: 'I am Test'
       }
+      ]
+    },
+    {
+      id: '2',
+      sumbmitted_at: '2017-05-02',
+      amount: '222',
+      subject_count: '3',
+      status: 'paid',
+      items: [{
+        date: '2017-05-02',
+        amount: 435,
+        usage: 'Dinner',
+        people_numbers: 4,
+        description: 'I am String'
+      }]
+    },
+    {
+      id: '3',
+      sumbmitted_at: '2018-05-02',
+      amount: '333',
+      subject_count: '2',
+      status: 'pending',
+      items: [{
+        date: '2018-05-02',
+        amount: 45,
+        usage: 'Taxi',
+        people_numbers: 1,
+        description: 'I am test'
+      }]
+    },
+    {
+      id: '4',
+      sumbmitted_at: '2019-05-02',
+      amount: '444',
+      subject_count: '3',
+      status: 'pending',
+      items: [{
+        date: '2019-05-02',
+        amount: 99,
+        usage: 'Other',
+        people_numbers: 1,
+        description: 'I am String'
+      }]
+    }
     ]
   },
 
@@ -85,7 +88,9 @@ export default new Vuex.Store({
       /* let oldReimbursement = state.tableData.find(x => x.id === obj.id)
       return oldReimbursement = obj */
 
-      const index = state.tableData.findIndex(({ id }) => id === obj.id)
+      const index = state.tableData.findIndex(({
+        id
+      }) => id === obj.id)
 
       if (index) {
         state.tableData[index] = obj
@@ -99,7 +104,16 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    logout({
+      state
+    }) {
+      return new Promise((resolve, reject) => {
+        state.isLogin = false
+        localStorage.removeItem('accountName')
+        sessionStorage.removeItem('accountName')
+        resolve()
+      })
+    }
   },
-  modules: {
-  }
+  modules: {}
 })
