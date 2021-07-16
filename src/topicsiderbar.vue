@@ -43,13 +43,14 @@ export default {
     background: black;
     .topicAccount{
       .span1{
+        margin-left: 15px;
         font-size:25px;
         color: yellow;
         margin-bottom: 10px;
       }
       .span2{
         font-size:15px;
-        margin: 0 11px 0 22px;
+        margin: 0 15px 0 22px;
         a:-webkit-any-link {
           color: white;
         }

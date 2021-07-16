@@ -15,11 +15,11 @@
       <div class="form-container">
         <div class="form-group">
           Email
-          <el-input placeholder="请输入内容" v-model="emailInput"></el-input>
+          <el-input placeholder="请输入任意内容" v-model="emailInput"></el-input>
         </div>
         <div class="form-group">
           Password
-          <el-input placeholder="请输入内容" v-model="passwordInput" show-password></el-input>
+          <el-input placeholder="请输入任意内容" v-model="passwordInput" show-password></el-input>
         </div>
         <div class="form-group">
           <el-checkbox v-model="checked">Remember me</el-checkbox>

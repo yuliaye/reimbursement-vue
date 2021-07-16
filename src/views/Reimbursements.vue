@@ -74,12 +74,12 @@
                       <el-table-column width="100" prop="people_numbers" label="People"></el-table-column>
                       <el-table-column width="100" prop="description" label="Description"></el-table-column>
                     </el-table>
-                    <button slot="reference">Review Detail</button>
+                    <el-button class="detail-button" slot="reference" type="info" plain>Review Detail</el-button>
                   </el-popover>
 
                   <template v-if="scope.row.status === 'pending'">
-                    <button @click="toEdit(scope.row.id)">Edit</button>
-                    <button @click="deleteButton(scope.row.id)">Delete</button>
+                    <el-button class="edit-button" @click="toEdit(scope.row.id)" type="primary" plain>Edit</el-button>
+                    <el-button class="delete-button" @click="deleteButton(scope.row.id)" type="danger" plain>Delete</el-button>
                   </template>
                 </template>
               </el-table-column>
@@ -103,7 +103,7 @@ import Siderbar from './Siderbar.vue'
 export default {
   data() {
     return {
-      pageSize: 2,
+      pageSize: 5,
       currentPage: 1,
       defaultSort: { prop: 'sumbmitted_at', order: 'descending' },
       currentSort: null,
@@ -184,7 +184,12 @@ export default {
 // }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  *{
+    margin: 0;
+    padding: 0;
+  };
+
   .el-header{
     height: 40px!important;
   }
@@ -223,5 +228,19 @@ export default {
     background-color: #E9EEF3;
     color: #333;
     padding: 10px;
+  }
+
+  .edit-button{
+    width:50px;
+    margin-right:-10px;
+    padding:8px;
+  }
+  .delete-button{
+    width:60px;
+    padding:8px;
+  }
+  .detail-button{
+    width:100px;
+    padding:8px;
   }
 </style>

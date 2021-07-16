@@ -177,6 +177,8 @@ export default {
 .add-button {
   margin-top: 15px;
   margin-bottom: 30px;
+  padding: 4px;
+  border-radius: 5px;
 }
 
 .submit-cancle {

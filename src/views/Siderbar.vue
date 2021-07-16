@@ -3,7 +3,7 @@
     <el-row class="tac">
       <el-col :span="20">
         <el-menu :default-active="$route.path" :router="true">
-          <el-menu-item index="1">
+          <el-menu-item>
             <span slot="title">LIST HEADER</span>
           </el-menu-item>
           <el-menu-item index="/reimbursements">
@@ -13,7 +13,7 @@
             <span slot="title">Add Reimbursements</span>
           </el-menu-item>
           <el-divider class="divider"></el-divider>
-          <el-menu-item index="4" class="spanhelp">
+          <el-menu-item class="spanhelp">
             <span slot="title">Help</span>
           </el-menu-item>
         </el-menu>
